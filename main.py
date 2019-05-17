@@ -69,20 +69,35 @@ class main(QMainWindow):
 
     def redraw(self):
         print(self.sender().text())
-        print(self.lay1.children())
-        self.scrollArea.removeItem(self.lay1)
-        # self.lay1.addLayout(QHBoxLayout(self))
-        # for i in self.lay1.children():
-        #     print(i)
-        #     break
-        # self.lay1.removeItem(i)
-        # sip.delete(i)
-        # for i in self.lay1.children():
-        #     self.lay1.removeItem(i)
-        #     sip.delete(i)
-        # print(self.lay1.children())
-        QApplication.processEvents()
-        time.sleep(1)
+        for i in range(self.vlay_2.count()):
+            self.vlay_2.itemAt(i).widget().deleteLater()
+        for j in range(5):
+            temp = QLabel("{}:99~{}:99".format(str(j),str(j+1)))
+            if j % 2 ==0:
+                temp.setStyleSheet('background-color: red; margin: 0px; font-size:20px;color:black')
+                # temp.setStyleSheet('margin: 0px; border:2px solid red; border-left: 0px; font-size:20px;color:black')
+            else:
+                temp.setStyleSheet('background-color: green; margin: 0px; font-size:20px;color:black')
+            temp.setFixedHeight(60)
+            temp.setFixedWidth(345)
+            self.vlay_2.addWidget(temp)
+        self.vlay_2.addWidget(QLabel())
+        #self.lay1 = QVBoxLayout(self)
+        #self.scrollcontent.resize(466, 100 * 5)
+        # for j in range(10):
+        #     temp = QLabel("{}:99~{}:99".format(str(i),str(i+1)), self)
+        #     if j % 2 ==0:
+        #         temp.setStyleSheet('background-color: red; margin: 0px; font-size:20px;color:black')
+        #         # temp.setStyleSheet('margin: 0px; border:2px solid red; border-left: 0px; font-size:20px;color:black')
+        #     else:
+        #         temp.setStyleSheet('background-color: green; margin: 0px; font-size:20px;color:black')
+        #     temp.setFixedHeight(60)
+        #     self.vlay_2.addWidget(temp)
+
+
+
+        #QApplication.processEvents()
+        #time.sleep(1)
 
     def setScrollArea(self):
         self.scrollArea = QtWidgets.QScrollArea(self)
@@ -90,45 +105,54 @@ class main(QMainWindow):
         self.scrollArea.resize(1000, 1000)
         self.scrollcontent = QWidget()
         self.setMinimumHeight(10)  ###important
-        self.lay1 = QVBoxLayout(self)
+        self.lay1 = QHBoxLayout(self)
 
         background_color = QColor(194, 216, 217)
         background_color.setNamedColor('#000000')
         palette = QPalette()
         palette.setColor(QPalette.Window, background_color)
-        '''
-               for i in range(2):
-            temp_lay = QHBoxLayout(self)
-            temp = QLabel('00:00~24:00', self)
-            temp.setStyleSheet('background-color: rgb(194, 216, 217);font-size:80px;color:black')
-            # temp.resize(500, 600)
-            temp_lay.addWidget(temp)
-            # temp.setAutoFillBackground(True)
-            # temp.setPalette(palette)
-            temp = QLabel(str(i) + '学习', self)
-            temp.setStyleSheet('background-color: rgb(232, 234, 212);font-size:40px;color:black')
-            temp.setAlignment(Qt.AlignRight)
-            temp_lay.addWidget(temp)
-            # a = QWidget(self)
-            # a.setLayout(temp_lay)
-            # self.lay1.addChildWidget(a)
-            self.lay1.addLayout(temp_lay) 
-        '''
-        for i in range(3):
-            temp_lay = QHBoxLayout(self)
-            temp = QLabel('00:00~24:00', self)
-            temp.setStyleSheet('background-color: rgb(194, 216, 217);font-size:80px;color:black')
-            # # temp.resize(500, 600)
-            # temp_lay.addWidget(temp)
-            # # temp.setAutoFillBackground(True)
-            # # temp.setPalette(palette)
-            # temp = QLabel(str(i) + '学习', self)
-            # temp.setStyleSheet('background-color: rgb(232, 234, 212);font-size:40px;color:black')
-            # temp.setAlignment(Qt.AlignRight)
-            #temp_lay.addWidget(temp)
-            self.lay1.addWidget(temp)
 
+        self.lay1.setContentsMargins(0,0,0,0)
+        self.lay1.setSpacing(0)
 
+        self.vlay_1 = QVBoxLayout(self)
+        self.vlay_1.setContentsMargins(0, 0, 0, 0)
+        self.vlay_1.setSpacing(0)
+
+        self.vlay_2 = QVBoxLayout(self)
+        self.vlay_2.setContentsMargins(0, 0, 0, 0)
+        self.vlay_2.setSpacing(0)
+        for i in range(24):
+            temp = QLabel("{}:00~{}:00".format(str(i),str(i+1)))
+            if i % 2 ==0:
+                temp.setStyleSheet('background-color: purple; margin: 0px; font-size:20px;color:black')
+                # temp.setStyleSheet('margin: 0px; border:2px solid red; border-left: 0px; font-size:20px;color:black')
+            else:
+                temp.setStyleSheet('background-color: rgb(232, 234, 212); margin: 0px; font-size:20px;color:black')
+            temp.setFixedHeight(120)
+            temp.setFixedWidth(200)
+            self.vlay_1.addWidget(temp)
+
+        for j in range(5):
+            temp = QLabel("{}:00~{}:00".format(str(j),str(j+1)))
+            if j % 2 ==0:
+                temp.setStyleSheet('background-color: red; margin: 0px; font-size:20px;color:black')
+                # temp.setStyleSheet('margin: 0px; border:2px solid red; border-left: 0px; font-size:20px;color:black')
+            else:
+                temp.setStyleSheet('background-color: green; margin: 0px; font-size:20px;color:black')
+            temp.setFixedHeight(60)
+            temp.setFixedWidth(345)
+            self.vlay_2.addWidget(temp)
+        #self.vlay_2.addStretch(0)
+        self.vlay_2.addWidget(QLabel())
+        # self.q1 = QWidget()
+        # self.q2 = QWidget()
+        # self.q1.setStyleSheet('border: 2px solid red; margin-left: 20px;')
+        # self.q2.setStyleSheet('border: 2px solid red;')
+        # self.q1.setLayout(self.vlay_1)
+        # self.q2.setLayout(self.vlay_2)
+        self.lay1.addLayout(self.vlay_1)
+        self.lay1.addLayout(self.vlay_2)
         self.scrollcontent.setLayout(self.lay1)
         self.scrollArea.setWidget(self.scrollcontent)
 
