@@ -9,6 +9,8 @@ from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
 import matplotlib.pyplot as plt
 import numpy as np
+import sip
+import time
 
 #创建一个matplotlib图形绘制类
 class MyFigure(FigureCanvas):
@@ -34,21 +36,23 @@ class MyFigure(FigureCanvas):
         labels = ['{}:{}'.format(city, value) for city, value in zip(cities, values)]
         print(labels)
         # 设置饼图的凸出显示
-        explode = [0, 0.1, 0]
+        explode = [0, 0, 0]
         self.axes.pie(values, labels=labels, colors=colors, explode=explode, shadow=True)
         self.fig.suptitle("pie")
 
-class main(QWidget):
+class main(QMainWindow):
     def __init__(self):
         super().__init__()
         self.initUI()
         self.show()
     def initUI(self):
         # 整体布局为水平布局
-        self.upest = QHBoxLayout(self)
+        self.centralWidget = QWidget(self)
+        self.upest = QHBoxLayout()
         self.setScrollArea()#左
         self.setPie()       #右
-        self.setLayout(self.upest)
+        self.centralWidget.setLayout(self.upest)
+        self.setCentralWidget(self.centralWidget)
 
         #图标
         self.setIcon()
@@ -56,21 +60,44 @@ class main(QWidget):
         #页面设置
         self.SetWindoww()
 
+        #设置菜单
+        menu = self.menuBar()
+        item = menu.addMenu('&日期选择')
+        ac   = QtWidgets.QAction('&Exit', self)
+        ac.triggered.connect(self.redraw)
+        item.addAction(ac)
+
+    def redraw(self):
+        print(self.sender().text())
+        print(self.lay1.children())
+        self.scrollArea.removeItem(self.lay1)
+        # self.lay1.addLayout(QHBoxLayout(self))
+        # for i in self.lay1.children():
+        #     print(i)
+        #     break
+        # self.lay1.removeItem(i)
+        # sip.delete(i)
+        # for i in self.lay1.children():
+        #     self.lay1.removeItem(i)
+        #     sip.delete(i)
+        # print(self.lay1.children())
+        QApplication.processEvents()
+        time.sleep(1)
 
     def setScrollArea(self):
         self.scrollArea = QtWidgets.QScrollArea(self)
         self.upest.addWidget(self.scrollArea)
-        self.upest.addStretch(0)
         self.scrollArea.resize(1000, 1000)
         self.scrollcontent = QWidget()
         self.setMinimumHeight(10)  ###important
-        lay1 = QVBoxLayout(self)
+        self.lay1 = QVBoxLayout(self)
 
         background_color = QColor(194, 216, 217)
         background_color.setNamedColor('#000000')
         palette = QPalette()
         palette.setColor(QPalette.Window, background_color)
-        for i in range(5):
+        '''
+               for i in range(2):
             temp_lay = QHBoxLayout(self)
             temp = QLabel('00:00~24:00', self)
             temp.setStyleSheet('background-color: rgb(194, 216, 217);font-size:80px;color:black')
@@ -82,32 +109,57 @@ class main(QWidget):
             temp.setStyleSheet('background-color: rgb(232, 234, 212);font-size:40px;color:black')
             temp.setAlignment(Qt.AlignRight)
             temp_lay.addWidget(temp)
-            lay1.addLayout(temp_lay)
+            # a = QWidget(self)
+            # a.setLayout(temp_lay)
+            # self.lay1.addChildWidget(a)
+            self.lay1.addLayout(temp_lay) 
+        '''
+        for i in range(3):
+            temp_lay = QHBoxLayout(self)
+            temp = QLabel('00:00~24:00', self)
+            temp.setStyleSheet('background-color: rgb(194, 216, 217);font-size:80px;color:black')
+            # # temp.resize(500, 600)
+            # temp_lay.addWidget(temp)
+            # # temp.setAutoFillBackground(True)
+            # # temp.setPalette(palette)
+            # temp = QLabel(str(i) + '学习', self)
+            # temp.setStyleSheet('background-color: rgb(232, 234, 212);font-size:40px;color:black')
+            # temp.setAlignment(Qt.AlignRight)
+            #temp_lay.addWidget(temp)
+            self.lay1.addWidget(temp)
 
-        self.scrollcontent.setLayout(lay1)
+
+        self.scrollcontent.setLayout(self.lay1)
         self.scrollArea.setWidget(self.scrollcontent)
 
     def setPie(self):
         # temp = QLabel('null')
         # temp.resize(500, 500)
-        self.F = MyFigure(width=3, height=2, dpi=100)
+        self.F = MyFigure(width=3, height=2)
         self.F.plotPie()
 
-        self.pie = QWidget()
-        self.pie.setGeometry(QtCore.QRect(180, 10, 1100, 500))
-        self.graphicview = QtWidgets.QGraphicsView(self.pie)
+        #self.pie = QWidget()
+        #self.pie.setGeometry(QtCore.QRect(180, 10, 1100, 500))
+        self.graphicview = QtWidgets.QGraphicsView()
+        self.graphicview.horizontalScrollBar().setVisible(False)
         graphicscene = QtWidgets.QGraphicsScene()
         graphicscene.addWidget(self.F)
+
+        print(self.graphicview.geometry())
+        # scene是一个展示2D图形的场景，setSceneRect的效果是设置场景中可见的矩形范围
+        # 参数a b c d; a是可见范围左上角坐标的横坐标 b是纵坐标； c是可见范围的横向距离，d是纵向距离
+        graphicscene.setSceneRect(QtCore.QRectF(101, 300, 590, 100))
         self.graphicview.setScene(graphicscene)
         self.graphicview.show()
 
-        self.upest.addWidget(self.pie)
+        self.upest.addWidget(self.graphicview)
 
     def setIcon(self):
         self.setWindowIcon(QIcon('icon.png'))
 
     def SetWindoww(self):
         self.move(403, 36)
+        #self.resize(1200,900)
         self.setFixedSize(1200, 900)
         self.setWindowTitle('觅时')
 
