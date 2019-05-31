@@ -63,7 +63,8 @@ class timer(QMainWindow):
         menubar = self.menuBar()
         menubar.setNativeMenuBar(False)
         background_menu = menubar.addMenu('背景图片')
-        sound_menu = self.menuBar().addMenu('背景音乐')
+        sound_menu = menubar.addMenu('背景音乐')
+        model_menu=menubar.addMenu('窗口模式')
 
         self.open_picture_action = QAction('本地图片', self)
         background_menu.addAction(self.open_picture_action)
@@ -81,6 +82,13 @@ class timer(QMainWindow):
         self.stop_music_action.triggered.connect(self.stop_music)
         self.continue_music_action.triggered.connect(self.continue_music)
         self.start_music_action.triggered.connect(self.start_music)
+
+        self.float_action=QAction('悬浮窗',self)
+        self.normal_action=QAction('正常窗口',self)
+        model_menu.addAction(self.float_action)
+        model_menu.addAction(self.normal_action)
+        self.float_action.triggered.connect(self.float)
+        self.normal_action.triggered.connect(self.normal)
 
     def open_picture(self):
         #选择本地图片
@@ -150,24 +158,30 @@ class timer(QMainWindow):
         self.setStyleSheet("QLabel{font-size:30px;font-weight:normal;font-family:Arial;}")
         self.label.setGeometry(QRect(300, 100, 20, 11))
 
-    def changeEvent(self, QEvent):
-    #def hideEvent(self, *args, **kwargs):
-        if self.isMinimized():
-            self.resize(550, 60)
-            # self.setWindowFlags(QtCore.Qt.WindowMinimizeButtonHint)
-            self.lcd3.setVisible(False)
-            self.splider.setVisible(False)
-            self.label.setVisible(False)
-            #self.hide()
-            self.setWindowFlags(Qt.WindowStaysOnTopHint)
-            # self.show()
-            self.floatButton.setVisible(True)
-            self.floatButton.setEnabled(True)
-            self.showNormal()
-            self.floatButton.clicked.connect(self.float)
+    def float(self):
+        #进入悬浮窗
+        self.hide()
+        self.resize(500, 60)
+        # self.setWindowFlags(QtCore.Qt.WindowMinimizeButtonHint)
+        self.lcd3.setVisible(False)
+        self.splider.setVisible(False)
+        self.label.setVisible(False)
+        self.setWindowFlags(Qt.WindowStaysOnTopHint)
+        self.show()
+        self.showNormal()
 
-    # def hideEvent(self, *args, **kwargs):
-    #     print('just test!!!')
+    def normal(self):
+        #退出悬浮窗
+        self.hide()
+        self.resize(900, 500)
+        screen = QDesktopWidget().screenGeometry()
+        size = self.geometry()
+        self.move((screen.width() - size.width()) / 2, (screen.height() - size.height()) / 3)
+        self.setWindowFlags(Qt.Widget)
+        self.lcd3.setVisible(True)
+        self.splider.setVisible(True)
+        self.label.setVisible(True)
+        self.show()
 
     def resizeEvent(self, *args, **kwargs):
         width=self.width()
@@ -181,22 +195,6 @@ class timer(QMainWindow):
         palette = QPalette()
         palette.setBrush(QPalette.Background, QBrush(QPixmap(self.image_file).scaled(self.size(),Qt.IgnoreAspectRatio,Qt.SmoothTransformation)))
         self.setPalette(palette)
-
-    def float(self):
-        #退出悬浮窗
-        self.resize(900, 500)
-        screen = QDesktopWidget().screenGeometry()
-        size = self.geometry()
-        self.move((screen.width() - size.width()) / 2, (screen.height() - size.height()) / 3)
-        self.hide()
-        self.setWindowFlags(Qt.Widget)
-        self.show()
-        print(1)
-        self.floatButton.setVisible(False)
-        self.floatButton.setEnabled(False)
-        self.lcd3.setVisible(True)
-        self.splider.setVisible(True)
-        self.label.setVisible(True)
 
     def init_Button(self):
         #开始结束按钮
@@ -264,13 +262,6 @@ class timer(QMainWindow):
         self.splider.setTickInterval(1)
         self.splider.setValue(100)
 
-        #退出悬浮窗按钮
-        self.floatButton=QPushButton()
-        self.floatButton.setText("退出悬浮窗")
-        self.floatButton.setStyleSheet("background:transparent;border-width: 50px;border-radius: 50px;font: bold 14px;")
-        self.floatButton.setVisible(False)
-        self.floatButton.setEnabled(False)
-
         #布局
         hbox = QHBoxLayout()
         vbox = QVBoxLayout()
@@ -280,7 +271,6 @@ class timer(QMainWindow):
         hbox.addWidget(self.pushButton_4)
         hbox.addWidget(self.splider)
         hbox.addStretch(1)
-        hbox.addWidget(self.floatButton)
         vbox.addStretch(1)
         vbox.addLayout(hbox)
         main_frame = QWidget()
