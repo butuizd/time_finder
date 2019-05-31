@@ -549,12 +549,17 @@ class timer(QMainWindow):
         self.anayze_window_opened = True
         self.anayze_window = analysis()
 
-    def closeEvent(self, QCloseEvent): #zd
-        print(1)
-        if self.anayze_window_opened:
-            self.anayze_window.close()
-        if self.task_is_on:
-            self.set_end(QTime.currentTime().toString(Qt.DefaultLocaleLongDate),'(无任务名)')
+    def closeEvent(self, QCloseEvent):
+        res = QMessageBox.question(self, '消息', '是否关闭这个窗口？', QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+        if res==QMessageBox.Yes:
+            if self.anayze_window_opened:
+                self.anayze_window.close()
+            if self.task_is_on:
+                self.set_end(QTime.currentTime().toString(Qt.DefaultLocaleLongDate),'(无任务名)')
+            QCloseEvent.accept()
+
+        else:
+            QCloseEvent.ignore()
 
     def initial_variables(self): #zd
         self.anayze_window_opened = False
