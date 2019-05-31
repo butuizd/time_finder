@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+# V3.1 修复时间轴绘制出错bug
 from sys import argv, exit
 import background_rc
 import stop_rc

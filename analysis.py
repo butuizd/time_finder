@@ -100,21 +100,21 @@ class analysis(QMainWindow):
         with open('./data/tasks','r') as f:
             tasks_to_show = filter_date([loads(x.strip('\n')) for x in f.readlines()], self.date_list[-1])
 
-        print(tasks_to_show)
+        #print(tasks_to_show)
         #从数据库获取最新一天的数据
         # tasks_to_show = [
-        #     {'title': '程设', 'phase': ('2019/5/17', '8:00', '10:50'), 'tags': '学习'},
-        #     {'title': '打游戏', 'phase': ('2019/5/17', '1:30', '4:20'), 'tags': '娱乐'},
-        #     {'title': '打篮球', 'phase': ('2019/5/17', '18:00', '19:15'), 'tags': '运动'}
+        #     {'title': '程设', 'phase': ('2019/5/31', '0:00', '0:30'), 'tags': '学习'},
+        #     {'title': '打游戏', 'phase': ('2019/5/31', '0:30', '1:00'), 'tags': '娱乐'},
+        #     {'title': '打篮球', 'phase': ('2019/5/31', '18:00', '19:15'), 'tags': '运动'}
         # ]
         self.initial_timeline = tasks_to_show
         #self.initial_timeline = []
         self.initial_pie = {x['tags']:self.time_len([x['phase'][1], x['phase'][2]]) for x in tasks_to_show}
         #self.initial_pie = []
         test = [
-            {'title': '程设', 'phase': ('2019/5/17', '8:00', '10:50'), 'tags': '测试0'},
-            {'title': '打游戏', 'phase': ('2019/5/17', '1:30', '4:20'), 'tags': '测试1'},
-            {'title': '打篮球', 'phase': ('2019/5/17', '18:00', '19:15'), 'tags': '测试2'}
+            {'title': '程设', 'phase': ('2019/5/28', '8:00', '10:50'), 'tags': '测试0'},
+            {'title': '打游戏', 'phase': ('2019/5/28', '1:30', '4:20'), 'tags': '测试1'},
+            {'title': '打篮球', 'phase': ('2019/5/28', '18:00', '19:15'), 'tags': '测试2'}
         ]
 
         #self.test = {x['tags']:self.time_len([x['phase'][1], x['phase'][2]]) for x in test}
@@ -187,7 +187,7 @@ class analysis(QMainWindow):
         def sort_func(elem):
             t = elem['phase'][1].split(':')
             t = [int(x) for x in t]
-            return t[0]*60+t[1]
+            return 60*t[0]+t[1]
 
         for i in range(self.vlay_2.count()):
             self.vlay_2.itemAt(i).widget().deleteLater()
@@ -203,6 +203,7 @@ class analysis(QMainWindow):
 
         #数据项x格式  {'title': '程设', 'phase': ('2019/5/17', '8:00', '10:50'), 'tags': '学习'},
         data.sort(key=sort_func)
+        print(data)
         index = -1;
         head_time = 0
         for x in data:
@@ -224,7 +225,8 @@ class analysis(QMainWindow):
                 self.vlay_2.addWidget(blank)
                 head_time = end_point
                 print(index)
-
+            else:
+                head_time = end_point
             temp.setStyleSheet("background-color: {}; margin: 0px; font-size:20px;color:black".format(self.colors[index % len(self.colors)]))
             #temp.setStyleSheet("background-color: rgb(144,237,15); margin: 0px; font-size:20px;color:black")
             temp.setFixedWidth(345)
