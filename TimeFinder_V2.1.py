@@ -548,6 +548,7 @@ class timer(QMainWindow):
         self.anayze_window_opened = False
         self.task_is_on = False
 if __name__ == "__main__":
+    tst = 1
     app = QApplication(sys.argv)
     w = timer()
     sys.exit(app.exec_())
