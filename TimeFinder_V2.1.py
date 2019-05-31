@@ -37,6 +37,11 @@ class timer(QMainWindow):
         self.time_start_fall=QTime(23,59,59)#倒计时结束时分秒
         self.time_start_data=QDate.currentDate()#倒计时结束年月日
 
+        self.time_system=QTimer(self)
+        self.time_system.setInterval(1000)
+        self.time_system.timeout.connect(self.refresh_system)
+        self.time_system.start()
+
         self.hour=0#暂停前已经记录的时分秒
         self.minute=0
         self.second=0
@@ -311,7 +316,7 @@ class timer(QMainWindow):
                 pygame.mixer.init()
                 self.sound = pygame.mixer.music.load("./sound/My Soul,Your Beats!.mp3")
                 pygame.mixer.music.play(-1, 0.0)
-
+    def refresh_system(self):
         hour=QTime.currentTime().hour()#显示系统时间
         min=QTime.currentTime().minute()
         sec = QTime.currentTime().second()
