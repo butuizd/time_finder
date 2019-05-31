@@ -213,7 +213,7 @@ class analysis(QMainWindow):
         for x in data:
             index += 1
             temp = QLabel(x['title'],self)
-            temp.setToolTip('标签:{}'.format(x['tags']))
+            temp.setToolTip('标签:{}\n时间：{} ~ {}'.format(x['tags'], x['phase'][1], x['phase'][2]))
             begin_point ,end_point = self.time_transform(x['phase'][1],x['phase'][2])
 
             if head_time != begin_point:
