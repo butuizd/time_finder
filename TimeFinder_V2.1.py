@@ -151,19 +151,23 @@ class timer(QMainWindow):
         self.label.setGeometry(QRect(300, 100, 20, 11))
 
     def changeEvent(self, QEvent):
+    #def hideEvent(self, *args, **kwargs):
         if self.isMinimized():
             self.resize(550, 60)
             # self.setWindowFlags(QtCore.Qt.WindowMinimizeButtonHint)
             self.lcd3.setVisible(False)
             self.splider.setVisible(False)
             self.label.setVisible(False)
-            self.hide()
+            #self.hide()
             self.setWindowFlags(Qt.WindowStaysOnTopHint)
             # self.show()
             self.floatButton.setVisible(True)
             self.floatButton.setEnabled(True)
             self.showNormal()
             self.floatButton.clicked.connect(self.float)
+
+    # def hideEvent(self, *args, **kwargs):
+    #     print('just test!!!')
 
     def resizeEvent(self, *args, **kwargs):
         width=self.width()
@@ -560,6 +564,7 @@ class timer(QMainWindow):
         self.anayze_window_opened = False
         self.task_is_on = False
         self.year = ''
+        self.tt = 0
 
     def skip_day(self):
         if not self.task_is_on:
@@ -582,7 +587,7 @@ class timer(QMainWindow):
 
     def test(self):
         self.tt += 1
-        print(self.tt)
+        print('悬浮窗第{}次'.format(self.tt))
 
 if __name__ == "__main__":
     app = QApplication(argv)
