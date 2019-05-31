@@ -25,8 +25,8 @@ class statistic(QWidget):
 
         self.okBtn = QPushButton("确定")
         self.cancelBtn = QPushButton("取消")
-        self.grid.addWidget(self.okBtn,4,1)
-        self.grid.addWidget(self.cancelBtn,4,2)
+        self.grid.addWidget(self.okBtn,5,1)
+        self.grid.addWidget(self.cancelBtn,5,2)
         self.state=0
         self.okBtn.clicked.connect(self.closeOk)
         self.cancelBtn.clicked.connect(self.closeCancel)
@@ -131,6 +131,14 @@ class statistic(QWidget):
         self.grid.addWidget(self.old_label,2,2)
 
         self.old.toggled.connect(self.old_labelcheck)
+
+        self.label_hide=QLabel("删除标签:",self)
+        self.hide=QPushButton("确认")
+        self.hide_label=QComboBox()
+        #self.load_oldlebels()
+        self.grid.addWidget(self.label_hide,4,0)
+        self.grid.addWidget(self.hide,4,2)
+        self.grid.addWidget(self.hide_label,4,1)
 
         self.new = QRadioButton("新增标签")
         self.new_label = QLabel('',self) #zd
