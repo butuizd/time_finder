@@ -258,14 +258,16 @@ class analysis(QMainWindow):
         for i in range(24):
             temp = QLabel("{}:00~{}:00".format(str(i),str(i+1)))
             if i % 2 ==0:
-                temp.setStyleSheet('background-color: purple; margin: 0px; font-size:20px;color:black')
+                temp.setStyleSheet('background-color: rgb(240, 248, 255); margin: 0px; font-size:20px;color:black')
                 # temp.setStyleSheet('margin: 0px; border:2px solid red; border-left: 0px; font-size:20px;color:black')
             else:
-                temp.setStyleSheet('background-color: rgb(232, 234, 212); margin: 0px; font-size:20px;color:black')
+                #rgb(232, 234, 212)
+                temp.setStyleSheet('background-color: rgb(230, 230, 250); margin: 0px; font-size:20px;color:black')
             temp.setFixedHeight(120)
             temp.setFixedWidth(200)
             self.vlay_1.addWidget(temp)
 
+        self.vlay_1.addWidget(QLabel())
         self.draw_timeline(self.initial_timeline)
 
         self.lay1.addLayout(self.vlay_1)
