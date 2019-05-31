@@ -5,7 +5,8 @@ import stop_rc
 import os
 from os import path
 from PyQt5 import QtCore, QtGui
-from PyQt5.QtCore import *
+#from PyQt5.QtGui import
+from PyQt5.QtCore import QRect, Qt, QSize
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 from PyQt5.QtWidgets import QApplication,QWidget,QVBoxLayout,QHBoxLayout,QDesktopWidget
@@ -153,7 +154,7 @@ class timer(QMainWindow):
         self.label.setFixedWidth(500)
         self.label.setFixedHeight(100)
         self.setStyleSheet("QLabel{font-size:30px;font-weight:normal;font-family:Arial;}")
-        self.label.setGeometry(QtCore.QRect(300, 100, 20, 11))
+        self.label.setGeometry(QRect(300, 100, 20, 11))
 
     def changeEvent(self, QEvent):
         if self.isMinimized():
@@ -163,7 +164,7 @@ class timer(QMainWindow):
             self.splider.setVisible(False)
             self.label.setVisible(False)
             self.hide()
-            self.setWindowFlags(QtCore.Qt.WindowStaysOnTopHint)
+            self.setWindowFlags(Qt.WindowStaysOnTopHint)
             # self.show()
             self.floatButton.setVisible(True)
             self.floatButton.setEnabled(True)
@@ -173,10 +174,10 @@ class timer(QMainWindow):
     def resizeEvent(self, *args, **kwargs):
         width=self.width()
         height=self.height()
-        self.lcd1.setGeometry(QtCore.QRect((width-300)/2, (height-111)/2, 300, 111))
-        self.lcd2.setGeometry(QtCore.QRect((width - 300) / 2, (height - 111) / 2, 300, 111))
-        self.lcd3.setGeometry(QtCore.QRect(width - 200, height - 100, 200, 111))
-        self.label.setGeometry(QtCore.QRect((width - 75) / 2, height / 2, 300, 111))
+        self.lcd1.setGeometry(QRect((width-300)/2, (height-111)/2, 300, 111))
+        self.lcd2.setGeometry(QRect((width - 300) / 2, (height - 111) / 2, 300, 111))
+        self.lcd3.setGeometry(QRect(width - 200, height - 100, 200, 111))
+        self.label.setGeometry(QRect((width - 75) / 2, height / 2, 300, 111))
 
         self.setAutoFillBackground(True)
         palette = QPalette()
@@ -190,7 +191,7 @@ class timer(QMainWindow):
         size = self.geometry()
         self.move((screen.width() - size.width()) / 2, (screen.height() - size.height()) / 3)
         self.hide()
-        self.setWindowFlags(QtCore.Qt.Widget)
+        self.setWindowFlags(Qt.Widget)
         self.show()
         print(1)
         self.floatButton.setVisible(False)
@@ -208,7 +209,7 @@ class timer(QMainWindow):
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap(":/start/start.png"))
         self.pushButton.setIcon(icon)
-        self.pushButton.setIconSize(QtCore.QSize(30, 30))
+        self.pushButton.setIconSize(QSize(30, 30))
         self.pushButton.setCheckable(True)
         self.pushButton.setFlat(True)
         self.pushButton.setObjectName("开始/结束")
@@ -222,7 +223,7 @@ class timer(QMainWindow):
         icon1 = QtGui.QIcon()
         icon1.addPixmap(QtGui.QPixmap(":/on/stop.png"))
         self.pushButton_2.setIcon(icon1)
-        self.pushButton_2.setIconSize(QtCore.QSize(30, 30))
+        self.pushButton_2.setIconSize(QSize(30, 30))
         self.pushButton_2.setCheckable(True)
         self.pushButton_2.setFlat(True)
         self.pushButton_2.setObjectName("pushButton_2")
@@ -230,12 +231,12 @@ class timer(QMainWindow):
 
         #数据分析按钮
         self.toolButton = QToolButton()
-        self.toolButton.setLayoutDirection(QtCore.Qt.LeftToRight)
+        self.toolButton.setLayoutDirection(Qt.LeftToRight)
         self.toolButton.setStyleSheet("background:transparent;")
         icon2 = QtGui.QIcon()
         icon2.addPixmap(QtGui.QPixmap(":/analytics/analytics.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.toolButton.setIcon(icon2)
-        self.toolButton.setIconSize(QtCore.QSize(30, 30))
+        self.toolButton.setIconSize(QSize(30, 30))
         self.toolButton.setAutoRaise(True)
         self.toolButton.setObjectName("toolButton")
         self.toolButton.clicked.connect(self.analyze)
@@ -249,7 +250,7 @@ class timer(QMainWindow):
         icon3.addPixmap(QtGui.QPixmap(":/sound/sound.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         icon3.addPixmap(QtGui.QPixmap(":/sound_off/Sound_off.png"), QtGui.QIcon.Normal, QtGui.QIcon.On)
         self.pushButton_4.setIcon(icon3)
-        self.pushButton_4.setIconSize(QtCore.QSize(30, 30))
+        self.pushButton_4.setIconSize(QSize(30, 30))
         self.pushButton_4.setCheckable(True)
         self.pushButton_4.setFlat(True)
         self.pushButton_4.setObjectName("pushButton_4")
