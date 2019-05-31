@@ -31,6 +31,7 @@ class timer(QMainWindow):
         self.time = QTimer(self)
         self.time.setInterval(1000)
         self.time.timeout.connect(self.refresh)
+        self.time.timeout.connect(self.skip_day) #zd
 
         self.time_start_up=QTime(0, 0, 0)#正计时的开始时间
         self.time_start_fall=QTime(23,59,59)#倒计时结束时分秒
@@ -56,7 +57,7 @@ class timer(QMainWindow):
     def init_window(self):
         self.resize(900, 600)
         self.setWindowTitle('觅时')
-        self.setWindowIcon(QIcon('icon.png'))
+        self.setWindowIcon(QIcon('./images/others/icon.png'))
         self.image_file="./images/background/timg.png"
         pygame.mixer.init()
         self.sound=pygame.mixer.music.load("./sound/Berliner Philharmoniker.mp3")#默认背景音乐
@@ -88,7 +89,7 @@ class timer(QMainWindow):
 
     def open_picture(self):
         #选择本地图片
-        self.image_file, _ = QFileDialog.getOpenFileName(self, 'Open file', 'C:\\', 'Image files (*.jpg *.gif *.png *.jpeg)')
+        self.image_file, _ = QFileDialog.getOpenFileName(self, 'Open file', './images/background', 'Image files (*.jpg *.gif *.png *.jpeg)')
         self.setAutoFillBackground(True)
         if os.path.exists(self.image_file)==False:
             return
@@ -98,7 +99,7 @@ class timer(QMainWindow):
 
     def open_music(self):
         #选择本地音乐
-        self.music_file, _ = QFileDialog.getOpenFileName(self, 'Open file', 'C:\\',
+        self.music_file, _ = QFileDialog.getOpenFileName(self, 'Open file', './sound',
                                                          'Image files (*.mp3 *.wan *.midi)')
         if os.path.exists(self.music_file)==False:
             return
@@ -299,6 +300,7 @@ class timer(QMainWindow):
             intervals =  '0' * (2 - len(str(hour))) + str(hour) + ':' + '0' * (2 - len(str(min))) +str(min) + ':' + '0' * (2 - len(str(sec))) +str(sec)
             self.lcd1.display(intervals)
 
+
         #倒计时
         self.startDate_fall = QDateTime.currentMSecsSinceEpoch()#显示倒计时
         self.endDate_fall = QDateTime(self.time_start_data, self.time_start_fall).toMSecsSinceEpoch()
@@ -488,6 +490,7 @@ class timer(QMainWindow):
     #每次开始会调用
     def set_begin(self, year, begin_time, tags): # zd
         # 年的格式转化
+        self.task_is_on = True
         def year_transform(year):
             new_year = ''
             for i in year:
@@ -504,6 +507,7 @@ class timer(QMainWindow):
 
     #结束或者暂停会调用 用于写入数据库
     def set_end(self, end_time, title): #zd
+        self.task_is_on = False
         # 判断是否大于1分钟，是则返回true否则false
         def cmp_1min(time1, time2):
             # print('begin compare')
@@ -542,6 +546,7 @@ class timer(QMainWindow):
 
     #调用数据分析窗口
     def analyze(self):
+        self.anayze_window_opened = True
         self.anayze_window = analysis()
 
     def closeEvent(self, QCloseEvent): #zd
@@ -554,6 +559,31 @@ class timer(QMainWindow):
     def initial_variables(self): #zd
         self.anayze_window_opened = False
         self.task_is_on = False
+        self.year = ''
+
+    def skip_day(self):
+        if not self.task_is_on:
+            return
+        # 年的格式转化
+        def year_transform(year):
+            new_year = ''
+            for i in year:
+                if i >= '0' and i <= '9':
+                    new_year = new_year + i
+                else:
+                    new_year = new_year + '/'
+            return new_year[:-1]
+        #last_time = QTime.currentTime().toString(Qt.DefaultLocaleLongDate)
+        last_date = QDate.currentDate().toString(Qt.DefaultLocaleLongDate)
+        if self.year!=year_transform(last_date):
+            print('天数不同！！！')
+            self.set_end('23:59:59', '(无)')
+            self.set_begin(last_date, '00:00:00', self.tags)
+
+    def test(self):
+        self.tt += 1
+        print(self.tt)
+
 if __name__ == "__main__":
     tst = 1
     app = QApplication(sys.argv)
