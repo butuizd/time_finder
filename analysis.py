@@ -1,18 +1,13 @@
-import sys
-import os
-from PyQt5.QtWidgets import (QMainWindow, QWidget, QHBoxLayout,
-                             QLabel, QApplication, QPushButton,QVBoxLayout,QDesktopWidget,QLabel)
-from PyQt5.QtGui import QIcon,QColor,QPalette
-from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QPixmap
-from PyQt5 import QtWidgets, QtCore
+from sys import argv, exit
+from os import path, system
+from PyQt5.QtWidgets import (QMainWindow, QWidget, QHBoxLayout,QAction,QGraphicsScene, QScrollArea, QGraphicsView,
+                             QVBoxLayout,QLabel)
+from PyQt5.QtGui import QIcon
+from PyQt5.QtCore import QRectF
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
 import matplotlib.pyplot as plt
-import numpy as np
-import sip
-import time
-import json
+from json import dumps, loads
 
 #创建一个matplotlib图形绘制类
 class MyFigure(FigureCanvas):
@@ -72,8 +67,8 @@ class analysis(QMainWindow):
 
     def loadMenu(self):
         #从数据库读取日期信息
-        if not os.path.isfile('./data/date_list'):
-            os.system('copy nul date_list')
+        if not path.isfile('./data/date_list'):
+            system('copy nul date_list')
             print('not exist')
         else:
             print('exists!')
@@ -86,7 +81,7 @@ class analysis(QMainWindow):
         menu = self.menuBar()
         item = menu.addMenu('&日期选择')
         for i in self.date_list:
-            ac   = QtWidgets.QAction(i,self)
+            ac   = QAction(i,self)
             ac.triggered.connect(self.redraw)
             item.addAction(ac)
 
@@ -103,7 +98,7 @@ class analysis(QMainWindow):
             return
 
         with open('./data/tasks','r') as f:
-            tasks_to_show = filter_date([json.loads(x.strip('\n')) for x in f.readlines()], self.date_list[-1])
+            tasks_to_show = filter_date([loads(x.strip('\n')) for x in f.readlines()], self.date_list[-1])
 
         print(tasks_to_show)
         #从数据库获取最新一天的数据
@@ -153,7 +148,7 @@ class analysis(QMainWindow):
         ]
 
         with open('./data/tasks','r') as f:
-            tasks_to_show = filter_date([json.loads(x.strip('\n')) for x in f.readlines()], date_to_show)
+            tasks_to_show = filter_date([loads(x.strip('\n')) for x in f.readlines()], date_to_show)
         #draw new pie
         pie_data = {x['tags']:self.time_len([x['phase'][1], x['phase'][2]]) for x in tasks_to_show}
         print('pie data is {}'.format(pie_data))
@@ -182,9 +177,9 @@ class analysis(QMainWindow):
         # graphicscene是一个展示2D图形的场景，setSceneRect的效果是设置场景中可见的矩形范围
         # 参数a b c d; a是可见范围左上角坐标的横坐标 b是纵坐标； c是可见范围的横向距离，d是纵向距离
         # graphicscene.setSceneRect(QtCore.QRectF(101, 300, 590, 100))
-        graphicscene = QtWidgets.QGraphicsScene()
+        graphicscene = QGraphicsScene()
         graphicscene.addWidget(self.F)
-        graphicscene.setSceneRect(QtCore.QRectF(101, 300, 590, 100))
+        graphicscene.setSceneRect(QRectF(101, 300, 590, 100))
         self.graphicview.setScene(graphicscene)
 
     def draw_timeline(self, data):
@@ -238,7 +233,7 @@ class analysis(QMainWindow):
         self.vlay_2.addWidget(QLabel())
 
     def setScrollArea(self):
-        self.scrollArea = QtWidgets.QScrollArea(self)
+        self.scrollArea = QScrollArea(self)
         self.upest.addWidget(self.scrollArea)
         self.scrollArea.resize(1000, 1000)
         self.scrollcontent = QWidget()
@@ -276,7 +271,7 @@ class analysis(QMainWindow):
         self.scrollArea.setWidget(self.scrollcontent)
 
     def setPie(self):
-        self.graphicview = QtWidgets.QGraphicsView()
+        self.graphicview = QGraphicsView()
         self.graphicview.horizontalScrollBar().setVisible(False)
         self.draw_pie(self.initial_pie, self.date_list[-1])
         self.graphicview.show()
@@ -293,7 +288,7 @@ class analysis(QMainWindow):
 
 
 
-if __name__ == '__main__':
-    app = QApplication(sys.argv)
-    w = main()
-    sys.exit(app.exec_())
+# if __name__ == '__main__':
+#     app = QApplication(argv)
+#     w = main()
+#     exit(app.exec_())

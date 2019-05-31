@@ -1,13 +1,9 @@
 # -*- coding: utf-8 -*-
-from PyQt5 import QtCore, QtGui, QtWidgets
-import sys
-from PyQt5.QtCore import *
-from PyQt5.QtWidgets import *
-from PyQt5.QtGui import *
-from PyQt5.QtWidgets import *
-from PyQt5.QtWidgets import QApplication,QLabel,QWidget,QVBoxLayout,QHBoxLayout,QDesktopWidget, QGridLayout
-from PyQt5.QtGui import QPalette, QBrush, QPixmap
-from PyQt5.QtCore import QTimer
+from sys import argv, exit
+from PyQt5.QtCore import Qt
+from PyQt5.QtGui import QIcon
+from PyQt5.QtWidgets import (QApplication,QLabel,QWidget,QGridLayout, QPushButton, QRadioButton, QButtonGroup, QComboBox,
+                             QLineEdit, QInputDialog)
 
 class statistic(QWidget):
     def __init__(self):
@@ -17,7 +13,7 @@ class statistic(QWidget):
 
     def init_ui(self):#窗口初始化，组件布局
         self.setFixedSize(700, 400)
-        self.setWindowFlags(QtCore.Qt.WindowMinimizeButtonHint)
+        self.setWindowFlags(Qt.WindowMinimizeButtonHint)
         self.setWindowTitle('觅时')
         self.setWindowIcon(QIcon('icon.png'))
         self.setWindowModality(Qt.ApplicationModal)
@@ -198,7 +194,7 @@ class statistic(QWidget):
         with open('./data/labels', 'a', encoding='utf-8') as f:
             f.write(newlabel+'\n')
 
-if __name__ == "__main__":
-    app = QApplication(sys.argv)
-    w = statistic()
-    sys.exit(app.exec_())
+# if __name__ == "__main__":
+#     app = QApplication(argv)
+#     w = statistic()
+#     exit(app.exec_())
