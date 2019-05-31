@@ -3,22 +3,22 @@ import sys
 import background_rc
 import stop_rc
 import os
-from PyQt5 import QtCore, QtGui, QtWidgets
+from os import path
+from PyQt5 import QtCore, QtGui
 from PyQt5.QtCore import *
-from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 from PyQt5.QtWidgets import QApplication,QWidget,QVBoxLayout,QHBoxLayout,QDesktopWidget
 from PyQt5.QtWidgets import QMainWindow, QPushButton
 from PyQt5.QtGui import QPalette, QBrush, QPixmap
 from PyQt5.QtCore import QTimer
-from datetime import datetime
 from statistic import *
 from statistic import statistic
 import json
 from analysis import analysis
 import pygame
 from pygame.locals import *
+
 
 class timer(QMainWindow):
     def __init__(self):
@@ -91,7 +91,7 @@ class timer(QMainWindow):
         #选择本地图片
         self.image_file, _ = QFileDialog.getOpenFileName(self, 'Open file', './images/background', 'Image files (*.jpg *.gif *.png *.jpeg)')
         self.setAutoFillBackground(True)
-        if os.path.exists(self.image_file)==False:
+        if path.exists(self.image_file)==False:
             return
         palette = QPalette()
         palette.setBrush(QPalette.Background, QBrush(QPixmap(self.image_file).scaled(self.size(),Qt.IgnoreAspectRatio,Qt.SmoothTransformation)))
@@ -101,7 +101,7 @@ class timer(QMainWindow):
         #选择本地音乐
         self.music_file, _ = QFileDialog.getOpenFileName(self, 'Open file', './sound',
                                                          'Image files (*.mp3 *.wan *.midi)')
-        if os.path.exists(self.music_file)==False:
+        if path.exists(self.music_file)==False:
             return
         pygame.mixer.init()
         self.sound=pygame.mixer.music.load(self.music_file)
