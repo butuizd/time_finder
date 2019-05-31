@@ -167,6 +167,7 @@ class timer(QMainWindow):
         self.splider.setVisible(False)
         self.label.setVisible(False)
         self.setWindowFlags(Qt.WindowStaysOnTopHint)
+        self.setWindowFlags(Qt.WindowMaximizeButtonHint)
         self.show()
         self.showNormal()
 
