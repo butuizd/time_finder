@@ -317,6 +317,7 @@ class timer(QMainWindow):
                 pygame.mixer.init()
                 self.sound = pygame.mixer.music.load("./sound/My Soul,Your Beats!.mp3")
                 pygame.mixer.music.play(-1, 0.0)
+
     def refresh_system(self):
         hour=QTime.currentTime().hour()#显示系统时间
         min=QTime.currentTime().minute()
@@ -522,6 +523,7 @@ class timer(QMainWindow):
 
         if not cmp_1min(self.begin_time, end_time):
             print('小于1分钟，不予计入')
+            QMessageBox.warning(self, '提示', '小于1分钟，不予计入',QMessageBox.Yes)
             return
         obj = {
             'title':title,
@@ -548,7 +550,7 @@ class timer(QMainWindow):
         self.anayze_window_opened = True
         self.anayze_window = analysis()
 
-    def closeEvent(self, *args, **kwargs): #zd
+    def closeEvent(self, QCloseEvent): #zd
         print(1)
         if self.anayze_window_opened:
             self.anayze_window.close()
