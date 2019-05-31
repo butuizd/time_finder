@@ -54,7 +54,7 @@ class timer(QMainWindow):
         self.setWindowIcon(QIcon('icon.png'))
         self.image_file="./images/background/timg.png"
         pygame.mixer.init()
-        self.sound=pygame.mixer.music.load("./sound/My Soul,Your Beats!.mp3")#默认背景音乐
+        self.sound=pygame.mixer.music.load("./sound/Berliner Philharmoniker.mp3")#默认背景音乐
         pygame.mixer.music.play(-1, 0.0)
 
     def init_bar(self):
@@ -62,7 +62,7 @@ class timer(QMainWindow):
         menubar = self.menuBar()
         menubar.setNativeMenuBar(False)
         background_menu = menubar.addMenu('背景图片')
-        sound_menu = self.menuBar().addMenu('白噪音')
+        sound_menu = self.menuBar().addMenu('背景音乐')
 
         self.open_picture_action = QAction('本地图片', self)
         background_menu.addAction(self.open_picture_action)
@@ -305,6 +305,10 @@ class timer(QMainWindow):
             intervals = '0' * (2 - len(str(hour))) + str(hour) + ':' + '0' * (2 - len(str(min))) + str(
                 min) + ':' + '0' * (2 - len(str(sec))) + str(sec)
             self.lcd2.display(intervals)
+            if hour==0 and min==0 and sec==0:
+                pygame.mixer.init()
+                self.sound = pygame.mixer.music.load("./sound/My Soul,Your Beats!.mp3")
+                pygame.mixer.music.play(-1, 0.0)
 
         hour=QTime.currentTime().hour()#显示系统时间
         min=QTime.currentTime().minute()
@@ -314,7 +318,7 @@ class timer(QMainWindow):
         self.lcd3.display(intervals)
 
     def sound_renew(self):
-        #白噪音状态按钮
+        #背景音乐状态按钮
         #if self.pushButton_4 == Qt.LeftButton:
         if self.sound_state==0:
             self.sound_state=1
@@ -342,7 +346,7 @@ class timer(QMainWindow):
             #任务开始
             self.state_continue_stop=1
             self.statis = statistic()
-            self.label.setText(self.statis.label_return)
+
             self.time.start()
 
 
@@ -368,6 +372,11 @@ class timer(QMainWindow):
                 icon1.addPixmap(QtGui.QPixmap(":/on/stop.png"))
                 self.pushButton_2.setIcon(icon1)
 
+                if self.statis.time_button==1:
+                    pygame.mixer.music.stop()
+                    pygame.mixer.music.load("./sound/Berliner Philharmoniker.mp3")
+                    pygame.mixer.music.play(-1, 0.0)
+
                 self.time.stop()
             else:
                 #没有确认退出
@@ -391,6 +400,8 @@ class timer(QMainWindow):
             icon1 = QtGui.QIcon()
             icon1.addPixmap(QtGui.QPixmap(":/stop/on.png"))
             self.pushButton_2.setIcon(icon1)
+            self.label.setText(self.statis.label_return)
+
             if self.statis.time_button==0:
                 self.time_start_up=time_start
                 self.lcd1.setVisible(True)
@@ -431,9 +442,6 @@ class timer(QMainWindow):
                 minute = (self.time_start_fall.minute() -self.minute+60)%60
                 second = (self.time_start_fall.second() -self.second+60)%60
                 self.time_start_fall = QTime(hour, minute, second)
-                #print(hour)
-                #print(minute)
-                #print(second)
 
             self.time.start()
 
