@@ -15,7 +15,7 @@ class statistic(QWidget):
         self.setFixedSize(700, 400)
         self.setWindowFlags(Qt.WindowMinimizeButtonHint)
         self.setWindowTitle('觅时')
-        self.setWindowIcon(QIcon('icon.png'))
+        self.setWindowIcon(QIcon('./images/others/icon.png'))
         self.setWindowModality(Qt.ApplicationModal)
         self.grid = QGridLayout()
         self.grid.setSpacing(10)
