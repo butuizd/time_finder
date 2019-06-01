@@ -35,6 +35,9 @@ class statistic(QWidget):
 
     def closeOk(self):
         self.insert_newlabel(self.new_label.text())
+        with open('./data/labels', 'w', encoding='utf-8') as f:
+            for x in self.labels_list:
+                f.write(x+'\n')
         self.state=1
         self.close()
 
@@ -134,6 +137,7 @@ class statistic(QWidget):
 
         self.label_hide=QLabel("删除标签:",self)
         self.hide=QPushButton("确认")
+        self.hide.clicked.connect(self.del_label)
         self.hide_label=QComboBox()
         self.load_oldlabels() # old_label and hide_label
         self.grid.addWidget(self.label_hide,4,0)
@@ -201,8 +205,17 @@ class statistic(QWidget):
             print('已经存在')
             return
 
-        with open('./data/labels', 'a', encoding='utf-8') as f:
-            f.write(newlabel+'\n')
+        self.labels_list.append(newlabel)
+        # with open('./data/labels', 'a', encoding='utf-8') as f:
+        #     f.write(newlabel+'\n')
+
+    #删除已有标签
+    def del_label(self):
+        if self.hide_label.currentIndex()==0:
+            return
+        self.labels_list.remove(self.hide_label.currentText())
+        self.hide_label.removeItem(self.hide_label.currentIndex())
+        #print(self.hide_label.currentText())
 
 # if __name__ == "__main__":
 #     app = QApplication(argv)
