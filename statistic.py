@@ -123,7 +123,7 @@ class statistic(QWidget):
         self.old_label = QComboBox()
         # self.old_label.addItem("默认")
         # self.old_label.addItem("学习")
-        self.load_oldlabels() #zd
+        #self.load_oldlabels() #zd
 
         self.old_label.setVisible(True)
         self.grid.addWidget(self.label2, 2, 0)
@@ -135,7 +135,7 @@ class statistic(QWidget):
         self.label_hide=QLabel("删除标签:",self)
         self.hide=QPushButton("确认")
         self.hide_label=QComboBox()
-        #self.load_oldlebels()
+        self.load_oldlabels() # old_label and hide_label
         self.grid.addWidget(self.label_hide,4,0)
         self.grid.addWidget(self.hide,4,2)
         self.grid.addWidget(self.hide_label,4,1)
@@ -188,11 +188,13 @@ class statistic(QWidget):
 
     #加载已有标签
     def load_oldlabels(self): #zd
+        self.hide_label.addItem('')
         with open('./data/labels', 'rb') as f:
             self.labels_list = [x.decode('utf-8').strip() for x in f.readlines() if x.decode('utf-8').strip()]
             for x in self.labels_list:
                 self.old_label.addItem(x)
-
+                if x!='默认':
+                    self.hide_label.addItem(x)
     #写入新标签
     def insert_newlabel(self, newlabel):
         if newlabel=='' or newlabel in self.labels_list:
