@@ -41,6 +41,7 @@ class timer(QMainWindow):
         self.hour=0#暂停前已经记录的时分秒
         self.minute=0
         self.second=0
+        self.interval=0
 
         self.time.start()
 
@@ -291,7 +292,7 @@ class timer(QMainWindow):
         #正计时
         self.startDate_up = QDateTime(QDate.currentDate(), self.time_start_up).toMSecsSinceEpoch()#显示正计时
         self.endDate_up = QDateTime.currentMSecsSinceEpoch()
-        interval_up = self.endDate_up - self.startDate_up
+        interval_up = self.endDate_up - self.startDate_up+self.interval
         if interval_up > 0:
             hour = interval_up // (60 * 60 * 1000)
             min = (interval_up - hour * 60 * 60 * 1000) // (60 * 1000)
@@ -303,7 +304,7 @@ class timer(QMainWindow):
         #倒计时
         self.startDate_fall = QDateTime.currentMSecsSinceEpoch()#显示倒计时
         self.endDate_fall = QDateTime(self.time_start_data, self.time_start_fall).toMSecsSinceEpoch()
-        interval_fall = self.endDate_fall - self.startDate_fall
+        interval_fall = self.endDate_fall - self.startDate_fall-self.interval
         if interval_fall > 0:
             hour = interval_fall // (60 * 60 * 1000)
             min = (interval_fall - hour * 60 * 60 * 1000) // (60 * 1000)
@@ -353,7 +354,7 @@ class timer(QMainWindow):
             #任务开始
             self.state_continue_stop=1
             self.statis = statistic()
-
+            self.interval=0
             self.time.start()
 
 
@@ -404,9 +405,6 @@ class timer(QMainWindow):
             icon = QIcon()
             icon.addPixmap(QPixmap(":/over/over.png"))
             self.pushButton.setIcon(icon)
-            icon1 = QIcon()
-            icon1.addPixmap(QPixmap(":/stop/on.png"))
-            self.pushButton_2.setIcon(icon1)
             self.label.setText(self.statis.label_return)
 
             if self.statis.time_button==0:
@@ -420,6 +418,7 @@ class timer(QMainWindow):
                 if hour>=24:
                     hour-=24
                     self.time_start_data=start.addDays(1)
+                self.time_start_up = time_start
                 self.time_start_fall = QTime(hour, minute, second)
                 self.lcd1.setVisible(False)
                 self.lcd2.setVisible(True)
@@ -437,19 +436,6 @@ class timer(QMainWindow):
             icon1 = QIcon()
             icon1.addPixmap(QPixmap(":/stop/on.png"))
             self.pushButton_2.setIcon(icon1)
-
-            if self.statis.time_button==0:
-                hour =  self.time_start_up.hour()-self.hour
-                minute = self.time_start_up.minute()-self.minute
-                second = self.time_start_up.second()-self.second
-                self.time_start_up = QTime(hour, minute, second)
-
-            else:
-                hour = (self.time_start_fall.hour() -self.hour+24)%24
-                minute = (self.time_start_fall.minute() -self.minute+60)%60
-                second = (self.time_start_fall.second() -self.second+60)%60
-                self.time_start_fall = QTime(hour, minute, second)
-
             self.time.start()
 
         if self.state_start_end%2==1 and self.state_continue_stop%2==0:
@@ -463,22 +449,15 @@ class timer(QMainWindow):
                 self.new_check = QLabel(text)
                 self.check=self.new_check.text()
                 print('任务备注=%s' % self.check)#title
-
                 self.set_end(time_end.toString(Qt.DefaultLocaleLongDate), self.check) #zd
 
                 icon1 = QIcon()
                 icon1.addPixmap(QPixmap(":/on/stop.png"))
                 self.pushButton_2.setIcon(icon1)
 
-                if self.statis.time_button==0:
-                    self.hour+=(time_end.hour()-self.time_start_up.hour()+24)%24
-                    self.minute += (time_end.minute() - self.time_start_up.minute()+60)%60
-                    self.second += (time_end.second() - self.time_start_up.second()+60)%60
-
-                else:
-                    self.hour=time_end.hour()+int(self.statis.hour_time_return)-self.time_start_fall.hour()
-                    self.minute = time_end.minute()+ int(self.statis.minute_time_return)-self.time_start_fall.minute()
-                    self.second = time_end.second()+ int(self.statis.second_time_return)-self.time_start_fall.second()
+                self.interval+=self.time_start_up.msecsTo(time_end)
+                if self.interval<0:
+                    self.interval+=86400 * 1000
 
                 self.time.stop()
             else:
