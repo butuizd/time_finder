@@ -167,8 +167,16 @@ class timer(QMainWindow):
         self.lcd3.setVisible(False)
         self.splider.setVisible(False)
         self.label.setVisible(False)
+        #self.setWindowFlags(Qt.WindowMaximizeButtonHint)
         self.setWindowFlags(Qt.WindowStaysOnTopHint)
-        self.setWindowFlags(Qt.WindowMaximizeButtonHint)
+
+
+        self.setAutoFillBackground(True)
+        palette = QPalette()
+        palette.setBrush(QPalette.Background, QBrush(
+            QPixmap(self.image_file).scaled(self.size(), Qt.IgnoreAspectRatio, Qt.SmoothTransformation)))
+        self.setPalette(palette)
+
         self.show()
         self.showNormal()
 
