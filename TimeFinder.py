@@ -163,7 +163,7 @@ class timer(QMainWindow):
     def float(self):
         #进入悬浮窗
         self.hide()
-        self.resize(500, 60)
+        self.resize(550, 60)
         # self.setWindowFlags(QtCore.Qt.WindowMinimizeButtonHint)
         self.lcd3.setVisible(False)
         self.splider.setVisible(False)
