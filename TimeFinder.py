@@ -453,7 +453,9 @@ class timer(QMainWindow):
                 self.check=self.new_check.text()
                 print('任务备注=%s' % self.check)#title
                 self.set_end(time_end.toString(Qt.DefaultLocaleLongDate), self.check) #zd
-
+                self.set_begin(now_end.toString(Qt.DefaultLocaleLongDate),
+                               time_end.toString(Qt.DefaultLocaleLongDate),
+                               '')
                 icon1 = QIcon()
                 icon1.addPixmap(QPixmap(":/on/stop.png"))
                 self.pushButton_2.setIcon(icon1)
