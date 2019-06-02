@@ -405,6 +405,9 @@ class timer(QMainWindow):
             icon = QIcon()
             icon.addPixmap(QPixmap(":/over/over.png"))
             self.pushButton.setIcon(icon)
+            icon1 = QIcon()
+            icon1.addPixmap(QPixmap(":/stop/on.png"))
+            self.pushButton_2.setIcon(icon1)
             self.label.setText(self.statis.label_return)
 
             if self.statis.time_button==0:
