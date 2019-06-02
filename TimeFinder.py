@@ -418,11 +418,16 @@ class timer(QMainWindow):
                 hour=int(time_start.hour())+int(self.statis.hour_time_return)
                 minute = int(time_start.minute()) + int(self.statis.minute_time_return)
                 second = int(time_start.second()) + int(self.statis.second_time_return)
+                msec=int(self.statis.hour_time_return)*3600*1000+int(self.statis.minute_time_return)*60*1000+int(self.statis.second_time_return)*1000
+                self.time_start_data = start
+                if second>=60:
+                    minute+=1
+                if minute>=60:
+                    hour+=1
                 if hour>=24:
-                    hour-=24
                     self.time_start_data=start.addDays(1)
                 self.time_start_up = time_start
-                self.time_start_fall = QTime(hour, minute, second)
+                self.time_start_fall=time_start.addMSecs(msec)
                 self.lcd1.setVisible(False)
                 self.lcd2.setVisible(True)
 
