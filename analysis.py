@@ -109,7 +109,8 @@ class analysis(QMainWindow):
         # ]
         self.initial_timeline = tasks_to_show
         #self.initial_timeline = []
-        self.initial_pie = {x['tags']:self.time_len([x['phase'][1], x['phase'][2]]) for x in tasks_to_show}
+        self.initial_pie = [(x['tags'],self.time_len([x['phase'][1], x['phase'][2]])) for x in tasks_to_show]
+        print('inital pie data is {}'.format(self.initial_pie))
         #self.initial_pie = []
         test = [
             {'title': '程设', 'phase': ('2019/5/28', '8:00', '10:50'), 'tags': '测试0'},
@@ -150,7 +151,7 @@ class analysis(QMainWindow):
         with open('./data/tasks','r') as f:
             tasks_to_show = filter_date([loads(x.strip('\n')) for x in f.readlines()], date_to_show)
         #draw new pie
-        pie_data = {x['tags']:self.time_len([x['phase'][1], x['phase'][2]]) for x in tasks_to_show}
+        pie_data = [(x['tags'],self.time_len([x['phase'][1], x['phase'][2]])) for x in tasks_to_show]
         print('pie data is {}'.format(pie_data))
         self.draw_pie(pie_data, date_to_show)
         self.draw_timeline(tasks_to_show)
@@ -159,7 +160,16 @@ class analysis(QMainWindow):
     def draw_pie(self, data, today):
         # if not data:
         #     return
+        def sum_data(data):
+            res = {}
+            for x in data:
+                res[x[0]] = 0
+            for x in data:
+                res[x[0]] += x[1]
+            return res
 
+        data = sum_data(data)
+        print('new pie data is {}'.format(data))
         self.F = MyFigure(width=3, height=2)
 
         values = [x for x in data.values()]
